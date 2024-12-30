@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  title: Configuration Service API
+  description: API for managing and retrieving configurations.
+  version: 1.0.0
+
+paths:
+  /api/config:
+    post:
+      summary: Save a new configuration
+      operationId: saveConfiguration
+      requestBody:
+        description: The configuration to save
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstNameLength:
+                  type: integer
+                firstNamePrefix:
+                  type: string
+                firstNameSuffix:
+                  type: string
+                lastNameLength:
+                  type: integer
+                lastNamePrefix:
+                  type: string
+                lastNameSuffix:
+                  type: string
+                birthDateFormat:
+                  type: string
+                birthDatePrefix:
+                  type: string
+                birthDateSuffix:
+                  type: string
+                counterFormat:
+                  type: string
+              required:
+                - firstNameLength
+                - firstNamePrefix
+                - firstNameSuffix
+                - lastNameLength
+                - lastNamePrefix
+                - lastNameSuffix
+                - birthDateFormat
+                - birthDatePrefix
+                - birthDateSuffix
+                - counterFormat
+      responses:
+        '200':
+          description: Configuration saved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Configuration saved successfully.
+        '400':
+          description: Invalid input data
+
+  /api/config/{configId}:
+    get:
+      summary: Get configuration by ID
+      operationId: getConfigurationById
+      parameters:
+        - name: configId
+          in: path
+          required: true
+          description: The ID of the configuration to retrieve
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Configuration found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstNameLength:
+                    type: integer
+                  firstNamePrefix:
+                    type: string
+                  firstNameSuffix:
+                    type: string
+                  lastNameLength:
+                    type: integer
+                  lastNamePrefix:
+                    type: string
+                  lastNameSuffix:
+                    type: string
+                  birthDateFormat:
+                    type: string
+                  birthDatePrefix:
+                    type: string
+                  birthDateSuffix:
+                    type: string
+                  counterFormat:
+                    type: string
+        '404':
+          description: Configuration not found
+
+  /api/config/default:
+    get:
+      summary: Get default configuration
+      operationId: getDefaultConfiguration
+      responses:
+        '200':
+          description: Default configuration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstNameLength:
+                    type: integer
+                    example: 5
+                  firstNamePrefix:
+                    type: string
+                    example: 'Mr.'
+                  firstNameSuffix:
+                    type: string
+                    example: 'Jr.'
+                  lastNameLength:
+                    type: integer
+                    example: 7
+                  lastNamePrefix:
+                    type: string
+                    example: 'Smith'
+                  lastNameSuffix:
+                    type: string
+                    example: 'Sr.'
+                  birthDateFormat:
+                    type: string
+                    example: 'yyyy-MM-dd'
+                  birthDatePrefix:
+                    type: string
+                    example: 'DOB:'
+                  birthDateSuffix:
+                    type: string
+                    example: 'X'
+                  counterFormat:
+                    type: string
+                    example: '0001'

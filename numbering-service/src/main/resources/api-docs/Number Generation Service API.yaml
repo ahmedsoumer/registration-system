@@ -1,0 +1,68 @@
+openapi: 3.0.3
+info:
+  title: Number Generation Service API
+  description: API for generating numbers based on a configuration.
+  version: 1.0.0
+
+paths:
+  /api/number:
+    post:
+      summary: Generate a number based on configuration
+      operationId: generateNumber
+      requestBody:
+        description: Request body to generate the number
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NumberGenerationRequest'
+      parameters:
+        - name: configId
+          in: query
+          required: false
+          description: The ID of the configuration to use for number generation.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Number generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberGenerationResponse'
+        '400':
+          description: Invalid input data or missing parameters
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    NumberGenerationRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        birthDate:
+          type: string
+          format: date
+          example: "1990-01-01"
+        counter:
+          type: integer
+          example: 1
+      required:
+        - firstName
+        - lastName
+        - birthDate
+        - counter
+
+    NumberGenerationResponse:
+      type: object
+      properties:
+        generatedNumber:
+          type: string
+          example: "Mr.JohnDoe0001"
