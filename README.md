@@ -23,6 +23,7 @@ Ce système permet aux utilisateurs de générer des numéros d'inscription form
 - **Spring Boot** pour la création des microservices.
 - **Spring Web** pour les API RESTful.
 - **Spring Data JPA** pour gérer les interactions avec la base de données.
+- **H2** comme base de données en mémoire (par défaut pour le développement et les tests).
 - **OpenAPI** pour la documentation des API.
 - **GitHub** pour le contrôle de version.
 
@@ -42,8 +43,7 @@ Ce système permet aux utilisateurs de générer des numéros d'inscription form
 Assurez-vous d'avoir les outils suivants installés :
 
 - JDK 17 ou supérieur
-- Maven ou Gradle
-- Docker (facultatif, pour la containerisation)
+- Maven
 - Postman (pour tester les points de terminaison de l'API)
 
 ### Configuration
@@ -52,3 +52,20 @@ Assurez-vous d'avoir les outils suivants installés :
    ```bash
    git clone https://github.com/ahmedsoumer/registration-system.git
    cd registration-system
+2. Importez le projet dans votre IDE préféré (par exemple, IntelliJ IDEA).
+3. Construisez le projet :
+   mvn clean install
+4. Démarrez les microservices :
+Ouvrez les deux projets dans votre IDE.
+Lancez chaque microservice en utilisant la commande suivante :
+mvn spring-boot:run
+Le Service de Configuration sera disponible à l'adresse suivante :
+http://localhost:8080
+Le Service de Numérotation sera disponible à l'adresse suivante :
+http://localhost:8081
+5. Documentation OpenAPI
+Chaque microservice dispose d'un fichier de documentation OpenAPI dans le répertoire resources/api-doc :
+Service de Configuration : La documentation OpenAPI se trouve dans resources/api-doc/configuration-service-api.yaml.
+Service de Numérotation : La documentation OpenAPI se trouve dans resources/api-doc/numbering-service-api.yaml.
+Vous pouvez importer ces fichiers dans Postman pour tester les points de terminaison de l'API.
+
