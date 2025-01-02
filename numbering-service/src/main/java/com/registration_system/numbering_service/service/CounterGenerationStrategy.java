@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.registration_system.numbering_service.client.ConfigurationClient;
 import com.registration_system.numbering_service.dto.NumberGenerationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CounterGenerationStrategy implements NumberGenerationStrategy{
 
     private final ConfigurationClient configurationClient;

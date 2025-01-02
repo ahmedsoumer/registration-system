@@ -39,6 +39,7 @@ public class ConfigurationServiceImpl implements ConfigurationService{
         configuration.setBirthDateSuffix(request.getBirthDateSuffix());
         configuration.setCounterFormat(request.getCounterFormat());
 
+        // Use the default save method
         Configuration savedConfiguration = configurationRepository.save(configuration);
         return mapToResponse(savedConfiguration);
     }

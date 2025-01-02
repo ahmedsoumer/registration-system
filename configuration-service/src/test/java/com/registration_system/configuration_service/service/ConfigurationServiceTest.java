@@ -1,6 +1,8 @@
 package com.registration_system.configuration_service.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.registration_system.configuration_service.config.DefaultConfigurationProperties;
 import com.registration_system.configuration_service.dto.ConfigurationRequest;
 import com.registration_system.configuration_service.dto.ConfigurationResponse;
 import com.registration_system.configuration_service.entity.Configuration;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
@@ -21,6 +24,9 @@ class ConfigurationServiceImplTest {
 
     @InjectMocks
     private ConfigurationServiceImpl configurationService;
+
+    @Mock
+    private DefaultConfigurationProperties configurationProperties;
 
     @Mock
     private ConfigurationRepository configurationRepository;
@@ -35,8 +41,8 @@ class ConfigurationServiceImplTest {
 
         // Initialize test data
         request = new ConfigurationRequest();
-        request.setNameLength(5);
-        request.setNamePrefix("M-");
+        request.setLastNameLength(5);
+        request.setLastNamePrefix("M-");
         request.setLastNameSuffix("-X");
         request.setFirstNameLength(3);
         request.setFirstNamePrefix("P-");
@@ -85,8 +91,8 @@ class ConfigurationServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("M-", result.get("namePrefix").asText());
-        assertEquals("5", result.get("nameLength").asText());
+        assertEquals("M-", result.get("lastNamePrefix").asText());
+        assertEquals("5", result.get("lastNameLength").asText());
     }
 
     @Test
@@ -100,14 +106,22 @@ class ConfigurationServiceImplTest {
 
     @Test
     void testGetDefaultConfiguration() {
+
+        // Arrange
+        when(configurationProperties.getFirstNamePrefix()).thenReturn("M-");
+        when(configurationProperties.getFirstNameLength()).thenReturn(3);
+        when(configurationProperties.getLastNamePrefix()).thenReturn("P-");
+        when(configurationProperties.getLastNameLength()).thenReturn(2);
+
         // Act
         JsonNode result = configurationService.getDefaultConfiguration();
 
         // Assert
         assertNotNull(result);
-        assertEquals("M-", result.get("namePrefix").asText());
-        assertEquals("3", result.get("nameLength").asText());
-        assertEquals("P-", result.get("firstNamePrefix").asText());
+        assertEquals("M-", result.get("firstNamePrefix").asText());
+        assertEquals("3", result.get("firstNameLength").asText());
+        assertEquals("P-", result.get("lastNamePrefix").asText());
+        assertEquals("2", result.get("lastNameLength").asText());
     }
 }
 

@@ -1,10 +1,8 @@
 package com.registration_system.configuration_service.repository;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.registration_system.configuration_service.dto.ConfigurationRequest;
 import com.registration_system.configuration_service.dto.ConfigurationResponse;
-import com.registration_system.configuration_service.exception.ConfigurationNotFoundException;
-import com.registration_system.configuration_service.service.ConfigurationService;
+import com.registration_system.configuration_service.entity.Configuration;
 import com.registration_system.configuration_service.service.ConfigurationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,23 +10,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.mockito.MockitoAnnotations;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-public class ConfigurationRepositoryTest {
+class ConfigurationServiceTest {
+
     @InjectMocks
-    private ConfigurationServiceImpl configurationService;
+    private ConfigurationServiceImpl configurationServiceImpl;
 
     @Mock
-    private ConfigurationService configurationServiceMock;
+    private ConfigurationRepository configurationRepository;
 
     private ConfigurationRequest request;
 
     @BeforeEach
     void setUp() {
-        // Initialize test data
+        MockitoAnnotations.openMocks(this);
+
+        // Initialize request DTO
         request = new ConfigurationRequest();
-        request.setNameLength(5);
-        request.setNamePrefix("M-");
+        request.setLastNameLength(5);
+        request.setLastNamePrefix("M-");
         request.setLastNameSuffix("-X");
         request.setFirstNameLength(3);
         request.setFirstNamePrefix("P-");
@@ -41,63 +44,38 @@ public class ConfigurationRepositoryTest {
 
     @Test
     void testSaveConfiguration() {
-        // Mocking the behavior of saveConfiguration
-        ConfigurationResponse expectedResponse = new ConfigurationResponse(
-                5, "M-", "-X", 3, "P-", "-Y", "YYYY", "BD-", "-Z", "%03d", 1L
-        );
+        // Mock the entity to be returned by the repository
+        Configuration savedEntity = new Configuration();
+        savedEntity.setId(1L);
+        savedEntity.setLastNameLength(request.getLastNameLength());
+        savedEntity.setLastNamePrefix(request.getLastNamePrefix());
+        savedEntity.setLastNameSuffix(request.getLastNameSuffix());
+        savedEntity.setFirstNameLength(request.getFirstNameLength());
+        savedEntity.setFirstNamePrefix(request.getFirstNamePrefix());
+        savedEntity.setFirstNameSuffix(request.getFirstNameSuffix());
+        savedEntity.setBirthDateFormat(request.getBirthDateFormat());
+        savedEntity.setBirthDatePrefix(request.getBirthDatePrefix());
+        savedEntity.setBirthDateSuffix(request.getBirthDateSuffix());
+        savedEntity.setCounterFormat(request.getCounterFormat());
 
-        when(configurationServiceMock.saveConfiguration(request)).thenReturn(expectedResponse);
+        // Mock repository save method
+        when(configurationRepository.save(any(Configuration.class))).thenReturn(savedEntity);
 
-        // Act
-        ConfigurationResponse actualResponse = configurationServiceMock.saveConfiguration(request);
+        // Call service method
+        ConfigurationResponse response = configurationServiceImpl.saveConfiguration(request);
 
-        // Assert
-        assertNotNull(actualResponse);
-        assertEquals(expectedResponse.getLastNameLength(), actualResponse.getLastNameLength());
-        assertEquals(expectedResponse.getLastNamePrefix(), actualResponse.getLastNamePrefix());
-        assertEquals(expectedResponse.getLastNameSuffix(), actualResponse.getLastNameSuffix());
-    }
-
-    @Test
-    void testGetConfigurationById_Found() {
-        // Mocking the behavior of getConfigurationById
-        Long configId = 1L;
-        JsonNode expectedJson = mock(JsonNode.class);
-
-        when(configurationServiceMock.getConfigurationById(configId)).thenReturn(expectedJson);
-
-        // Act
-        JsonNode actualJson = configurationServiceMock.getConfigurationById(configId);
-
-        // Assert
-        assertNotNull(actualJson);
-        assertEquals(expectedJson, actualJson);
-    }
-
-    @Test
-    void testGetConfigurationById_NotFound() {
-        // Mocking the behavior of getConfigurationById when no configuration is found
-        Long configId = 1L;
-
-        when(configurationServiceMock.getConfigurationById(configId))
-                .thenThrow(new ConfigurationNotFoundException("Configuration not found"));
-
-        // Act & Assert
-        assertThrows(ConfigurationNotFoundException.class, () -> configurationServiceMock.getConfigurationById(configId));
-    }
-
-    @Test
-    void testGetDefaultConfiguration() {
-        // Mocking the behavior of getDefaultConfiguration
-        JsonNode expectedJson = mock(JsonNode.class);
-
-        when(configurationServiceMock.getDefaultConfiguration()).thenReturn(expectedJson);
-
-        // Act
-        JsonNode actualJson = configurationServiceMock.getDefaultConfiguration();
-
-        // Assert
-        assertNotNull(actualJson);
-        assertEquals(expectedJson, actualJson);
+        // Verify response
+        assertNotNull(response);
+        assertEquals(savedEntity.getId(), response.getId());
+        assertEquals(savedEntity.getLastNameLength(), response.getLastNameLength());
+        assertEquals(savedEntity.getLastNamePrefix(), response.getLastNamePrefix());
+        assertEquals(savedEntity.getLastNameSuffix(), response.getLastNameSuffix());
+        assertEquals(savedEntity.getFirstNameLength(), response.getFirstNameLength());
+        assertEquals(savedEntity.getFirstNamePrefix(), response.getFirstNamePrefix());
+        assertEquals(savedEntity.getFirstNameSuffix(), response.getFirstNameSuffix());
+        assertEquals(savedEntity.getBirthDateFormat(), response.getBirthDateFormat());
+        assertEquals(savedEntity.getBirthDatePrefix(), response.getBirthDatePrefix());
+        assertEquals(savedEntity.getBirthDateSuffix(), response.getBirthDateSuffix());
+        assertEquals(savedEntity.getCounterFormat(), response.getCounterFormat());
     }
 }

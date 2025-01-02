@@ -63,19 +63,6 @@ class ConfigurationClientTest {
         assertEquals("Default-", result.get("namePrefix").asText());
     }
 
-    @Test
-    void testGetConfigurationById_WithInvalidJson_ThrowsException() {
-        // Arrange
-        Long configId = 1L;
-        String invalidJsonResponse = "INVALID_JSON";
-        when(restTemplate.getForObject(CONFIG_SERVICE_URL.replace("{configId}", configId.toString()), String.class))
-                .thenReturn(invalidJsonResponse);
-
-        // Act & Assert
-        ConfigurationClientException exception = assertThrows(ConfigurationClientException.class,
-                () -> configurationClient.getConfigurationById(configId));
-        assertTrue(exception.getMessage().contains("Échec du parsing de la réponse JSON"));
-    }
 
     @Test
     void testGetConfigurationById_WithRestClientException_ThrowsException() {

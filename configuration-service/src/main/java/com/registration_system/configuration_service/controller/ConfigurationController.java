@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.registration_system.configuration_service.dto.ConfigurationRequest;
 import com.registration_system.configuration_service.dto.ConfigurationResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.registration_system.configuration_service.service.ConfigurationService;
@@ -14,6 +15,7 @@ public class ConfigurationController {
 
     private final ConfigurationService configurationService;
 
+    @Autowired
     public ConfigurationController(ConfigurationService configurationService) {
         this.configurationService = configurationService;
     }

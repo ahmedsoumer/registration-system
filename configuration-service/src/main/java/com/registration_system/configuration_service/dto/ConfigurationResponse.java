@@ -28,6 +28,10 @@ public class ConfigurationResponse {
         this.id = id;
     }
 
+    public ConfigurationResponse() {
+
+    }
+
     public Long getId() {
         return id;
     }

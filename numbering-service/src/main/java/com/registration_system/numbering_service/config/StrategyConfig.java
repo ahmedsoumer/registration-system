@@ -6,6 +6,8 @@ import com.registration_system.numbering_service.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class StrategyConfig {
 
@@ -27,5 +29,10 @@ public class StrategyConfig {
     @Bean
     public NumberGenerationStrategy counterGenerationStrategy(ConfigurationClient clientConfig) {
         return new CounterGenerationStrategy(clientConfig);
+    }
+
+    @Bean
+    public NumberingService numberingService(List<NumberGenerationStrategy> strategies) {
+        return new NumberingServiceImpl(strategies);
     }
 }
